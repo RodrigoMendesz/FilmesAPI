@@ -24,7 +24,9 @@ namespace FilmesAPI.Controllers
         public IActionResult AdicionaFilme([FromBody] Filme filme)
         {
             _context.Filmes.Add(filme);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaFilmePorId), new { id = filme.Id }, filme);
+
         }
 
         [HttpGet]
@@ -36,23 +38,23 @@ namespace FilmesAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmePorId(int id)
         {
-           Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme != null)
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            if (filme != null)
             {
                 return Ok(filme);
             }
             return NotFound();
-            
+
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizaFilme(int id, [FromBody] Filme filmeNovo)
         {
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme == null)
+            if (filme == null)
             {
                 return NotFound();
-                
+
             }
             filme.Titulo = filmeNovo.Titulo;
             filme.Genero = filmeNovo.Genero;
@@ -60,10 +62,10 @@ namespace FilmesAPI.Controllers
             filme.Diretor = filmeNovo.Diretor;
 
             _context.SaveChanges();
-            return NoContent();
+            return Ok();
         }
 
-        [HttpDelete("{id")]
+        [HttpDelete("{id}")]
 
         public IActionResult DeletaFilme(int id)
         {
@@ -74,7 +76,7 @@ namespace FilmesAPI.Controllers
             }
             _context.Remove(filme);
             _context.SaveChanges();
-            return NoContent();
+            return Ok();
 
         }
 
